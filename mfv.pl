@@ -39,8 +39,9 @@ sub tones {
              "*" => "sin 941 sin 1209",
              "0" => "sin 941 sin 1336",
              "#" => "sin 941 sin 1477");
-    print "$phone\n";
 
+    # Play the tones
+    print "Playing: ";
     while($phone =~ /(.)/g) {
         print "$1";
         system "play -n  synth 0.15 $t{$1} > /dev/null 2>&1";
