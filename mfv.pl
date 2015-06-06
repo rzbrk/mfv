@@ -1,5 +1,21 @@
 #!/usr/bin/perl
 
+#    MFV -- Generate dual-tone multi-frequency sounds with perl and sox
+#    Copyright (C) 2015 Jan Grosser
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 use strict;
 use warnings;
 use Config::Simple ('-lc');
@@ -99,7 +115,11 @@ Examples:\n
     $0 \"+49 123 456789\"     Play DTMF for given phone number
     $0 \"name\"               Search phone number in alias file
     $0 --help               Output help message\n
-MFV is free software licenced under GNU General Public license version 3.
+MFV Copyright (C) 2015 Jan Grosser <email\@jan-grosser.de>
+This program comes with ABSOLUTELY NO WARRANTY. This is free software, and
+you are welcome to redistribute it under under the terms of the GNU General
+Public License as published by the Free Software Foundation, either version 3
+of the License, or any later version.\n
 For more information visit <https://github.com/rzbrk/mfv>.\n";
 }
 
@@ -154,7 +174,7 @@ sub tones {
              "0" => "-n synth $len sin 941 sin 1336 fade $fade $len $fade channels 1",
              "#" => "-n synth $len sin 941 sin 1477 fade $fade $len $fade channels 1");
 
-    # Play the tones. If number or character cannot be found in the hast defined
+    # Play the tones. If number or character cannot be found in the hash defined
     # above, simply skip it.
     print "Playing: ";
     while($phone =~ /(.)/g) {
