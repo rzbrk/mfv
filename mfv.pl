@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Config::Simple ('-lc');
-use Getopt::Long;
+use Getopt::Long qw(:config no_getopt_compat);
 
 # Define constants
 my $err_msg = "\"$ARGV[0]\" is neither a valid phone number nor an alias!\nCall \"$0 --help\" for help.\n\n";
