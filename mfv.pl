@@ -11,7 +11,7 @@ if ($#ARGV != 0) {
 }
 
 # Check if argument is valid phone number
-if ($ARGV[0]=~m/^[+]*[0-9-\(\)\/ #\*]*$/) {
+if (is_phone($ARGV[0])) {
     my $phone = $ARGV[0];
 
     # Remove all special characters
@@ -22,6 +22,20 @@ if ($ARGV[0]=~m/^[+]*[0-9-\(\)\/ #\*]*$/) {
     tones($phone);
 } else {
     print "$ARGV[0] is no valid phone number!\n";
+}
+
+#
+# Checks if string is a valid phone number and returns 1 if this is the case.
+# Otherwise, it returns 0.
+#
+sub is_phone {
+    my $string = shift;
+
+    my $ret = 0;
+    if ($string =~m/^[+]*[0-9-\(\)\/ #\*]*$/) {
+        $ret = 1;
+    }
+    return $ret;
 }
 
 # 
