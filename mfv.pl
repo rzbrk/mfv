@@ -5,7 +5,11 @@ use warnings;
 use Config::Simple ('-lc');
 
 # Define constants
-my $aliases = "./aliases";              # Aliases file
+my $aliases = "./aliases";                  # Aliases file
+my $tone_len = 0.20;                        # Length of tones
+my $pause = 0.05;                           # Pause between tones
+my $fade = 0.02;                            # Fade in/out times (zero for no
+                                            # fading)
 my $err_msg = "\"$ARGV[0]\" is neither a valid phone number nor an alias!\nCall \"$0 --help\" for help.\n\n";
 
 # Check if program was invoked correctly
@@ -26,13 +30,13 @@ my $phone;
 # Check if argument is valid phone number
 if (is_phone($ARGV[0])) {
     $phone = $ARGV[0];
-    $phone = clean_phone($phone);       # Remove special characters
-    tones($phone);                      # Play tones
+    $phone = clean_phone($phone);           # Remove special characters
+    tones($phone,$tone_len,$pause,$fade);   # Play tones
 } elsif (in_aliases($ARGV[0], $aliases) ne "") {
     $phone = in_aliases($ARGV[0], $aliases);
     if (is_phone($phone)) {
-        $phone = clean_phone($phone);   # Remove special characters
-        tones($phone);                  # Play tones
+        $phone = clean_phone($phone);       # Remove special characters
+        tones($phone,$tone_len,$pause,$fade);   # Play tones
     } else {
         print $err_msg;
     }
@@ -90,19 +94,22 @@ sub is_phone {
 #
 sub tones {
     my $phone = shift;
+    my $len = shift;
+    my $pause = shift;
+    my $fade = shift;
 
-    my %t = ("1" => "sin 697 sin 1209",
-             "2" => "sin 697 sin 1336",
-             "3" => "sin 697 sin 1477",
-             "4" => "sin 770 sin 1209",
-             "5" => "sin 770 sin 1336",
-             "6" => "sin 770 sin 1477",
-             "7" => "sin 852 sin 1209",
-             "8" => "sin 852 sin 1336",
-             "9" => "sin 852 sin 1477",
-             "*" => "sin 941 sin 1209",
-             "0" => "sin 941 sin 1336",
-             "#" => "sin 941 sin 1477");
+    my %t = ("1" => "-n synth $len sin 697 sin 1209 fade $fade $len $fade",
+             "2" => "-n synth $len sin 697 sin 1336 fade $fade $len $fade",
+             "3" => "-n synth $len sin 697 sin 1477 fade $fade $len $fade",
+             "4" => "-n synth $len sin 770 sin 1209 fade $fade $len $fade",
+             "5" => "-n synth $len sin 770 sin 1336 fade $fade $len $fade",
+             "6" => "-n synth $len sin 770 sin 1477 fade $fade $len $fade",
+             "7" => "-n synth $len sin 852 sin 1209 fade $fade $len $fade",
+             "8" => "-n synth $len sin 852 sin 1336 fade $fade $len $fade",
+             "9" => "-n synth $len sin 852 sin 1477 fade $fade $len $fade",
+             "*" => "-n synth $len sin 941 sin 1209 fade $fade $len $fade",
+             "0" => "-n synth $len sin 941 sin 1336 fade $fade $len $fade",
+             "#" => "-n synth $len sin 941 sin 1477 fade $fade $len $fade");
 
     # Play the tones. If number or character cannot be found in the hast defined
     # above, simply skip it.
@@ -110,8 +117,8 @@ sub tones {
     while($phone =~ /(.)/g) {
         if (exists($t{$1})) {
             print "$1";
-            system "play -n  synth 0.15 $t{$1} > /dev/null 2>&1";
-            sleep 0.05;
+            system "play $t{$1} > /dev/null 2>&1";
+            sleep $pause;
         }
     }
     print "\n";
