@@ -141,18 +141,18 @@ sub tones {
     my $pause = shift;
     my $fade = shift;
 
-    my %t = ("1" => "-n synth $len sin 697 sin 1209 fade $fade $len $fade",
-             "2" => "-n synth $len sin 697 sin 1336 fade $fade $len $fade",
-             "3" => "-n synth $len sin 697 sin 1477 fade $fade $len $fade",
-             "4" => "-n synth $len sin 770 sin 1209 fade $fade $len $fade",
-             "5" => "-n synth $len sin 770 sin 1336 fade $fade $len $fade",
-             "6" => "-n synth $len sin 770 sin 1477 fade $fade $len $fade",
-             "7" => "-n synth $len sin 852 sin 1209 fade $fade $len $fade",
-             "8" => "-n synth $len sin 852 sin 1336 fade $fade $len $fade",
-             "9" => "-n synth $len sin 852 sin 1477 fade $fade $len $fade",
-             "*" => "-n synth $len sin 941 sin 1209 fade $fade $len $fade",
-             "0" => "-n synth $len sin 941 sin 1336 fade $fade $len $fade",
-             "#" => "-n synth $len sin 941 sin 1477 fade $fade $len $fade");
+    my %t = ("1" => "-n synth $len sin 697 sin 1209 fade $fade $len $fade channels 1",
+             "2" => "-n synth $len sin 697 sin 1336 fade $fade $len $fade channels 1",
+             "3" => "-n synth $len sin 697 sin 1477 fade $fade $len $fade channels 1",
+             "4" => "-n synth $len sin 770 sin 1209 fade $fade $len $fade channels 1",
+             "5" => "-n synth $len sin 770 sin 1336 fade $fade $len $fade channels 1",
+             "6" => "-n synth $len sin 770 sin 1477 fade $fade $len $fade channels 1",
+             "7" => "-n synth $len sin 852 sin 1209 fade $fade $len $fade channels 1",
+             "8" => "-n synth $len sin 852 sin 1336 fade $fade $len $fade channels 1",
+             "9" => "-n synth $len sin 852 sin 1477 fade $fade $len $fade channels 1",
+             "*" => "-n synth $len sin 941 sin 1209 fade $fade $len $fade channels 1",
+             "0" => "-n synth $len sin 941 sin 1336 fade $fade $len $fade channels 1",
+             "#" => "-n synth $len sin 941 sin 1477 fade $fade $len $fade channels 1");
 
     # Play the tones. If number or character cannot be found in the hast defined
     # above, simply skip it.
