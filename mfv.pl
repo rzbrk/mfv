@@ -3,14 +3,30 @@
 use strict;
 use warnings;
 use Config::Simple ('-lc');
+use Getopt::Long;
 
 # Define constants
+my $err_msg = "\"$ARGV[0]\" is neither a valid phone number nor an alias!\nCall \"$0 --help\" for help.\n\n";
 my $aliases = "./aliases";                  # Aliases file
 my $tone_len = 0.20;                        # Length of tones
 my $pause = 0.05;                           # Pause between tones
 my $fade = 0.02;                            # Fade in/out times (zero for no
                                             # fading)
-my $err_msg = "\"$ARGV[0]\" is neither a valid phone number nor an alias!\nCall \"$0 --help\" for help.\n\n";
+
+# Read in command line options
+GetOptions (
+    "aliases=s"         => \$aliases,
+    "tone-length=f"     => \$tone_len,
+    "pause=f"           => \$pause,
+    "fade=f"            => \$fade,
+);
+
+# Check whether fading time is too long. Fading shall never exceed 25% of the
+# length of the tone
+if (2*$fade > 0.25*$tone_len) {
+    print "Error: fading time is too long with respect to tone length\n";
+    exit;
+}
 
 # Check if program was invoked correctly
 if ($#ARGV != 0) {
