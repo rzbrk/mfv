@@ -2,7 +2,10 @@
 
 use strict;
 use warnings;
+use Config::Simple ('-lc');
 
+# Define constants
+my $aliases = "./aliases";              # Aliases file
 
 # Check if program was invoked correctly
 if ($#ARGV != 0) {
@@ -10,17 +13,24 @@ if ($#ARGV != 0) {
     exit;
 }
 
+# Initialize variable for phone number
+my $phone;
+
 # Check if argument is valid phone number
 if (is_phone($ARGV[0])) {
-    my $phone = $ARGV[0];
-
-    # Remove all special characters
-    $phone = clean_phone($phone);
-
-    # Play tones
-    tones($phone);
+    $phone = $ARGV[0];
+    $phone = clean_phone($phone);       # Remove special characters
+    tones($phone);                      # Play tones
+} elsif (in_aliases($ARGV[0], $aliases) ne "") {
+    $phone = in_aliases($ARGV[0], $aliases);
+    if (is_phone($phone)) {
+        $phone = clean_phone($phone);   # Remove special characters
+        tones($phone);                  # Play tones
+    } else {
+        print "\"$ARGV[0]\" is neither a valid phone number nor an alias!\n";
+    }
 } else {
-    print "$ARGV[0] is no valid phone number!\n";
+    print "\"$ARGV[0]\" is neither a valid phone number nor an alias!\n";
 }
 
 ###############################################################################
@@ -86,3 +96,25 @@ sub tones {
     }
     print "\n";
 }
+
+#
+# Retrieve phone number for search string in aliases file, if defined. If not
+# defined, the routine returns an empty string.
+#
+sub in_aliases {
+    my $string = shift;     # String to look in aliases file
+    my $aliases = shift;    # Aliases file
+
+    # Initialize return value
+    my $ret = "";
+
+    # First check, if aliases file exists and is readable
+    if (-r $aliases) {
+        # Retrieve phone number for alias in $string if defined. If not, return
+        # empty string.
+        my $cfg = new Config::Simple($aliases);
+        $ret = $cfg->param($string) or $ret = "";
+    }
+    return $ret;
+}
+
