@@ -12,13 +12,15 @@ my $tone_len = 0.20;                        # Length of tones
 my $pause = 0.05;                           # Pause between tones
 my $fade = 0.02;                            # Fade in/out times (zero for no
                                             # fading)
+my $help=0;
 
 # Read in command line options
 GetOptions (
-    "aliases=s"         => \$aliases,
-    "tone-length=f"     => \$tone_len,
-    "pause=f"           => \$pause,
-    "fade=f"            => \$fade,
+    "aliases|a=s"       => \$aliases,
+    "tone-length|l=f"   => \$tone_len,
+    "pause|p=f"         => \$pause,
+    "fade|f=f"          => \$fade,
+    "help|h|?"          => \$help,
 );
 
 # Check whether fading time is too long. Fading shall never exceed 25% of the
@@ -35,7 +37,7 @@ if ($#ARGV != 0) {
 }
 
 # Check if user wants help
-if ($ARGV[0] =~ m/^[-]{0,2}(help|h|\?)$/i) {
+if ($help) {
     help();
     exit;
 }
@@ -70,10 +72,35 @@ sub help {
     print "
 MFV -- Plays DTMF (dual-tone multi-freq signal) for phone numbers.\n
 Usage:\n
-    $0 \"+49 123 456789\"     play DTMF for given phone number
-    $0 \"alias\"              search phone number in alias file
-    $0 --help               output help message\n
-MFV is free software licenced under GNU General Public license v3.\n";
+    $0 [OPT] [NUMBER]\n
+Command Line Options:\n
+    --aliases=[FILE]        Specify alias file. Default: ./aliases
+    --tone-length=[LEN]     Length of DTMF tones in seconds. Default: 0.2s.
+    --pause=[LEN]           Length of pause between tones in seconds.
+                            Default: 0.05s.
+    --fade=[LEN]            Length of fading in/out in seconds. fade=0
+                            disables fading. 2 times the fading time shall
+                            never exceed the total length of the tones.
+                            Default: 0.02s.
+    --help                  Shows this help message.\n
+Argument:\n
+Argument is a series of digits including the characters * and # and blanks.
+If the number contains blanks, put the number in quotation marks. Following
+formats are supported:\n
+    123456
+    \"01234-123456\"
+    \"01234/123456\"
+    \"(01234) 123456\"
+    \"01234/123-456\"
+    \"+49 123 456789\"
+    \"0049 123 456789\"
+    \"01234-123-456#3#\"\n
+Examples:\n
+    $0 \"+49 123 456789\"     Play DTMF for given phone number
+    $0 \"name\"               Search phone number in alias file
+    $0 --help               Output help message\n
+MFV is free software licenced under GNU General Public license version 3.
+For more information visit <https://github.com/rzbrk/mfv>.\n";
 }
 
 #
