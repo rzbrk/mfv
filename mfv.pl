@@ -24,6 +24,10 @@ if ($ARGV[0]=~m/^[+]*[0-9-\(\)\/ #\*]*$/) {
     print "$ARGV[0] is no valid phone number!\n";
 }
 
+# 
+# Converts series of numbers (0...9) and "*" and "#" to dual-tone
+# multi-frequency signals. 
+#
 sub tones {
     my $phone = shift;
 
@@ -40,12 +44,15 @@ sub tones {
              "0" => "sin 941 sin 1336",
              "#" => "sin 941 sin 1477");
 
-    # Play the tones
+    # Play the tones. If number or character cannot be found in the hast defined
+    # above, simply skip it.
     print "Playing: ";
     while($phone =~ /(.)/g) {
-        print "$1";
-        system "play -n  synth 0.15 $t{$1} > /dev/null 2>&1";
-        sleep 0.05;
+        if (exists($t{$1})) {
+            print "$1";
+            system "play -n  synth 0.15 $t{$1} > /dev/null 2>&1";
+            sleep 0.05;
+        }
     }
     print "\n";
 }
