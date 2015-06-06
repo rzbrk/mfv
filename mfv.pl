@@ -6,10 +6,17 @@ use Config::Simple ('-lc');
 
 # Define constants
 my $aliases = "./aliases";              # Aliases file
+my $err_msg = "\"$ARGV[0]\" is neither a valid phone number nor an alias!\nCall \"$0 --help\" for help.\n\n";
 
 # Check if program was invoked correctly
 if ($#ARGV != 0) {
-    print "\nUsage: mfv.pl \"+49 123 456789\"\n";
+    help();
+    exit;
+}
+
+# Check if user wants help
+if ($ARGV[0] =~ m/^[-]{0,2}(help|h|\?)$/i) {
+    help();
     exit;
 }
 
@@ -27,14 +34,27 @@ if (is_phone($ARGV[0])) {
         $phone = clean_phone($phone);   # Remove special characters
         tones($phone);                  # Play tones
     } else {
-        print "\"$ARGV[0]\" is neither a valid phone number nor an alias!\n";
+        print $err_msg;
     }
 } else {
-    print "\"$ARGV[0]\" is neither a valid phone number nor an alias!\n";
+    print $err_msg;
 }
 
 ###############################################################################
 ###############################################################################
+
+#
+# Print help message.
+#
+sub help {
+    print "
+MFV -- Plays DTMF (dual-tone multi-freq signal) for phone numbers.\n
+Usage:\n
+    $0 \"+49 123 456789\"     play DTMF for given phone number
+    $0 \"alias\"              search phone number in alias file
+    $0 --help               output help message\n
+MFV is free software licenced under GNU General Public license v3.\n";
+}
 
 #
 # Cleans the string holding a phone number by removing all special characters
