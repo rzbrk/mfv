@@ -15,13 +15,29 @@ if (is_phone($ARGV[0])) {
     my $phone = $ARGV[0];
 
     # Remove all special characters
-    $phone =~ s/[-\/\(\)\s]//g;
-    $phone =~ s/[+]/00/g;
+    $phone = clean_phone($phone);
 
     # Play tones
     tones($phone);
 } else {
     print "$ARGV[0] is no valid phone number!\n";
+}
+
+###############################################################################
+###############################################################################
+
+#
+# Cleans the string holding a phone number by removing all special characters
+# (like brackets, blanks and minus signs) and replaces "+" by "00".
+#
+sub clean_phone {
+    my $phone = shift;
+
+    # Remove all special characters
+    $phone =~ s/[-\/\(\)\s]//g;
+    $phone =~ s/[+]/00/g;
+
+    return $phone;
 }
 
 #
