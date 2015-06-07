@@ -1,10 +1,10 @@
-MFV -- Plays DTMF (dual-tone multi-freq signal) for phone numbers.
+## MFV -- Plays DTMF (dual-tone multi-freq signal) for phone numbers.
 
-Usage:
+# Usage:
 
     mfv.pl [OPT] [NUMBER]
 
-Command Line Options:
+# Command Line Options:
     --aliases=[FILE]        Specify alias file. Default: ./aliases
     --tone-length=[LEN]     Length of DTMF tones in seconds. Default: 0.2s.
     --pause=[LEN]           Length of pause between tones in seconds.
@@ -15,7 +15,7 @@ Command Line Options:
                             Default: 0.02s.
     --help                  Shows this help message.
 
-Argument:
+# Argument:
 
 Argument is a series of digits including the characters * and # and blanks.
 If the number contains blanks, put the number in quotation marks. Following
@@ -30,10 +30,16 @@ formats are supported:
     "0049 123 456789"
     "01234-123-456#3#"
 
-Examples:
+# Examples:
     mfv.pl "+49 123 456789"     Play DTMF for given phone number
     mfv.pl "name"               Search phone number in alias file
     mfv.pl --help               Output help message
+
+# Dependencies
+
+    SoX -- sound processing program     <http://sox.sourceforge.net/>
+    Perl Config::Simple
+    Perl Getopt::Long
 
 MFV Copyright (C) 2015 Jan Grosser <email@jan-grosser.de>
 This program comes with ABSOLUTELY NO WARRANTY. This is free software, and
