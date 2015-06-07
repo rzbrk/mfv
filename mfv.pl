@@ -23,12 +23,17 @@ use Getopt::Long qw(:config no_getopt_compat);
 
 # Define constants
 my $err_msg = "\"$ARGV[0]\" is neither a valid phone number nor an alias!\nCall \"$0 --help\" for help.\n\n";
+my $player = "/bin/play";                   # SoX play
 my $aliases = "./aliases";                  # Aliases file
 my $tone_len = 0.20;                        # Length of tones
 my $pause = 0.05;                           # Pause between tones
 my $fade = 0.02;                            # Fade in/out times (zero for no
                                             # fading)
 my $help=0;
+
+# Check if SoX is available
+system("$player --version > /dev/null 2&>1") == 0
+    or die "Error: SoX (/bin/play) not available\n";
 
 # Read in command line options
 GetOptions (
@@ -180,7 +185,7 @@ sub tones {
     while($phone =~ /(.)/g) {
         if (exists($t{$1})) {
             print "$1";
-            system "play $t{$1} > /dev/null 2>&1";
+            system "$player $t{$1} > /dev/null 2>&1";
             sleep $pause;
         }
     }
